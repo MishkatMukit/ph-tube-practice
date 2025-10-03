@@ -17,7 +17,8 @@
         .font-inter {
             font-family: "Inter", sans-serif;
         }
-        .active{
+
+        .active {
             background-color: #FF1F3D;
             color: white;
         }
@@ -41,11 +42,24 @@
         </header>
         <main>
             <nav id="category-container" class="flex gap-5 justify-center py-6">
-                <div><button id="btn-all" onclick="loadVideos()" class="btn btn-sm active hover:bg-[#FF1F3D] hover:text-white">All</button></div>
+                <div><button id="btn-all" onclick="loadVideos()"
+                        class="btn btn-sm active hover:bg-[#FF1F3D] hover:text-white">All</button></div>
             </nav>
             <section id="video-container" class="grid grid-cols-4 gap-4">
-                
+
             </section>
+            <!-- You can open the modal using ID.showModal() method -->
+            <button class="btn" onclick="my_modal_3.showModal()">open modal</button>
+            <dialog id="video_details" class="modal" >
+                <div class="modal-box p-8">
+                    <form method="dialog">
+                        <button class="btn btn-sm btn-circle btn-ghost absolute right-1 top-1">✕</button>
+                    </form>
+                    <div id="details-container">
+
+                    </div>
+                </div>
+            </dialog>
         </main>
         <footer>
 
