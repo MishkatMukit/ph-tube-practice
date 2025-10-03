@@ -8,8 +8,19 @@ const loadCategories=()=>{
 // category: "Music"
 // category_id: "1001"
 // }
-const loadVideos=()=>{
-    fetch('https://openapi.programming-hero.com/api/phero-tube/videos').then(res=>res.json()).then(data=>displayVideos(data.videos))
+const showLoader=()=>{
+    document.getElementById('loader').classList.remove("hidden")
+    document.getElementById('video-container').classList.add("hidden")
+
+}
+const hideLoader=()=>{
+    document.getElementById('loader').classList.add("hidden")
+    document.getElementById('video-container').classList.remove("hidden")
+
+}
+const loadVideos=(searchtext="")=>{
+    showLoader();
+    fetch(`https://openapi.programming-hero.com/api/phero-tube/videos?title=${searchtext}`).then(res=>res.json()).then(data=>displayVideos(data.videos))
     removeActiveClass()
     document.getElementById('btn-all').classList.add("active")
 }
@@ -20,6 +31,7 @@ const removeActiveClass=()=>{
     }
 }
 const loadCategoryVideos=(id)=>{
+    showLoader()
     const url  = `https://openapi.programming-hero.com/api/phero-tube/category/${id}`
        fetch(url).then(res=>res.json()).then(data=>{
         
@@ -77,6 +89,7 @@ const displayVideos = (videos)=>{
                     <h3 class="text-2xl font-bold text-center">Oops!! Sorry, There is no <br>content here</h3>
                 </div>
         `
+        hideLoader()
         return
     }
     videoContainer.innerHTML=""
@@ -101,7 +114,7 @@ const displayVideos = (videos)=>{
                             </div>
                         </div>
                         <div>
-                            <h2 class="font-bold text-xl">Midnight seren</h2>
+                            <h2 class="font-bold text-xl">${video.title}</h2>
                             <p class="flex items-center gap-1 py-1 text-[#17171780]"> ${video.authors[0].profile_name}
                                 ${video.authors[0].verified==true?`<img class="w-5 h-5" src="https://img.icons8.com/?size=96&id=QMxOVe0B9VzG&format=png" alt="">`:''}
                                 
@@ -118,6 +131,11 @@ const displayVideos = (videos)=>{
         `
         videoContainer.appendChild(videoCard)
     });
+    hideLoader()
 }
+document.getElementById('search-input').addEventListener('keyup',(event)=>{
+    const input = event.target.value
+    loadVideos(input)
+})
 loadCategories()
 loadVideos()
