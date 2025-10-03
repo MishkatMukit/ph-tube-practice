@@ -12,14 +12,17 @@ const loadVideos=()=>{
     fetch('https://openapi.programming-hero.com/api/phero-tube/videos').then(res=>res.json()).then(data=>displayVideos(data.videos))
 }
 
-
+const loadCategoryVideos=(id)=>{
+    const url  = `https://openapi.programming-hero.com/api/phero-tube/category/${id}`
+       fetch(url).then(res=>res.json()).then(data=>displayVideos(data.category))
+}
 const displayCategories=(categories)=>{
     const categoryContainer = document.getElementById('category-container')
     for(let cat of categories){
         // create elements
         const categoryDiv = document.createElement('div')
         categoryDiv.innerHTML = `
-            <button class="btn btn-sm hover:bg-[#FF1F3D] hover:text-white">${cat.category}</button>
+            <button onclick="loadCategoryVideos(${cat.category_id})" class="btn btn-sm hover:bg-[#FF1F3D] hover:text-white">${cat.category}</button>
         `
         //append elements
         categoryContainer.appendChild(categoryDiv)
@@ -27,7 +30,7 @@ const displayCategories=(categories)=>{
 }
 const displayVideos = (videos)=>{
     const videoContainer = document.getElementById('video-container')
-
+    videoContainer.innerHTML=''
     videos.forEach(video => {
         // create element
         const videoCard = document.createElement('div')
@@ -53,7 +56,7 @@ const displayVideos = (videos)=>{
                             <p class="flex items-center gap-1 py-1 text-[#17171780]"> ${video.authors[0].profile_name}<img class="w-5 h-5" src="https://img.icons8.com/?size=96&id=QMxOVe0B9VzG&format=png" alt=""></p>
                             <p class=" text-[#17171780]">${video.others.views} views
 
-</p>
+                            </p>
                         </div>
                     </div>
                 </div>
