@@ -10,11 +10,27 @@ const loadCategories=()=>{
 // }
 const loadVideos=()=>{
     fetch('https://openapi.programming-hero.com/api/phero-tube/videos').then(res=>res.json()).then(data=>displayVideos(data.videos))
+    removeActiveClass()
+    document.getElementById('btn-all').classList.add("active")
 }
-
+const removeActiveClass=()=>{
+    const activeButtons = document.getElementsByClassName("active")
+    for(let button of activeButtons){
+        button.classList.remove("active")
+    }
+}
 const loadCategoryVideos=(id)=>{
     const url  = `https://openapi.programming-hero.com/api/phero-tube/category/${id}`
-       fetch(url).then(res=>res.json()).then(data=>displayVideos(data.category))
+       fetch(url).then(res=>res.json()).then(data=>{
+        
+        removeActiveClass();
+
+        const clickedButton = document.getElementById(`btn-${id}`)
+        clickedButton.classList.add("active")
+        
+        displayVideos(data.category)
+       })
+        
 }
 const displayCategories=(categories)=>{
     const categoryContainer = document.getElementById('category-container')
@@ -22,14 +38,25 @@ const displayCategories=(categories)=>{
         // create elements
         const categoryDiv = document.createElement('div')
         categoryDiv.innerHTML = `
-            <button onclick="loadCategoryVideos(${cat.category_id})" class="btn btn-sm hover:bg-[#FF1F3D] hover:text-white">${cat.category}</button>
+            <button id="btn-${cat.category_id}" onclick="loadCategoryVideos(${cat.category_id})" class="btn btn-sm hover:bg-[#FF1F3D] hover:text-white">${cat.category}</button>
         `
         //append elements
         categoryContainer.appendChild(categoryDiv)
     }
 }
 const displayVideos = (videos)=>{
+
     const videoContainer = document.getElementById('video-container')
+
+        if(videos.length===0){
+        videoContainer.innerHTML=`
+            <div class="col-span-4 flex flex-col justify-center items-center gap-5 py-20">
+                    <img class="w-[150px]" src="./assets/Icon.png" alt="">
+                    <h3 class="text-2xl font-bold text-center">Oops!! Sorry, There is no <br>content here</h3>
+                </div>
+        `
+        return
+    }
     videoContainer.innerHTML=''
     videos.forEach(video => {
         // create element
